@@ -1,8 +1,13 @@
+"use client"
+
 import Link from "next/link"
 import { Mail, Phone, MapPin } from "lucide-react"
 import { Logo } from "./logo"
+import { useLanguage } from "@/hooks/use-language"
 
 export function Footer() {
+  const { t } = useLanguage()
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -10,7 +15,7 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <Logo variant="white" size="md" />
-            <p className="text-gray-400">Daha sağlıklı ve güçlü bir sen için AI destekli fitness arkadaşın.</p>
+            <p className="text-gray-400">{t.footer.description}</p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-gray-400">
                 <Mail className="h-4 w-4" />
@@ -29,26 +34,26 @@ export function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Ürün</h3>
+            <h3 className="text-lg font-semibold mb-4">{t.footer.product}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/features" className="text-gray-400 hover:text-white transition-colors">
-                  Özellikler
+                  {t.footer.features}
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="text-gray-400 hover:text-white transition-colors">
-                  Fiyatlandırma
+                  {t.footer.pricing}
                 </Link>
               </li>
               <li>
                 <Link href="/download" className="text-gray-400 hover:text-white transition-colors">
-                  Uygulamayı İndir
+                  {t.footer.downloadApp}
                 </Link>
               </li>
               <li>
                 <Link href="/api" className="text-gray-400 hover:text-white transition-colors">
-                  API
+                  {t.footer.api}
                 </Link>
               </li>
             </ul>
@@ -56,26 +61,26 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Şirket</h3>
+            <h3 className="text-lg font-semibold mb-4">{t.footer.company}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/about" className="text-gray-400 hover:text-white transition-colors">
-                  Hakkımızda
+                  {t.footer.about}
                 </Link>
               </li>
               <li>
                 <Link href="/careers" className="text-gray-400 hover:text-white transition-colors">
-                  Kariyer
+                  {t.footer.careers}
                 </Link>
               </li>
               <li>
                 <Link href="/blog" className="text-gray-400 hover:text-white transition-colors">
-                  Blog
+                  {t.footer.blog}
                 </Link>
               </li>
               <li>
                 <Link href="/press" className="text-gray-400 hover:text-white transition-colors">
-                  Basın
+                  {t.footer.press}
                 </Link>
               </li>
             </ul>
@@ -83,26 +88,26 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Destek</h3>
+            <h3 className="text-lg font-semibold mb-4">{t.footer.support}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/help" className="text-gray-400 hover:text-white transition-colors">
-                  Yardım Merkezi
+                  {t.footer.helpCenter}
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  İletişim
+                  {t.footer.contact}
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">
-                  Gizlilik Politikası
+                  {t.footer.privacy}
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">
-                  Hizmet Şartları
+                  {t.footer.terms}
                 </Link>
               </li>
             </ul>
@@ -111,16 +116,18 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">© {new Date().getFullYear()} Wellnity AI. Tüm hakları saklıdır.</p>
+            <p className="text-gray-400">
+              © {new Date().getFullYear()} Wellnity AI. {t.footer.allRightsReserved}
+            </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                Gizlilik
+                {t.footer.privacy}
               </Link>
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                Şartlar
+                {t.footer.terms}
               </Link>
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                Çerezler
+                {t.footer.cookies}
               </Link>
             </div>
           </div>

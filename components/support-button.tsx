@@ -6,9 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { MessageCircle, X, Mail, Phone, MessageSquare, HelpCircle } from "lucide-react"
 import Link from "next/link"
+import { useLanguage } from "@/hooks/use-language"
 
 export function SupportButton() {
   const [isOpen, setIsOpen] = useState(false)
+  const { t } = useLanguage()
 
   return (
     <>
@@ -31,7 +33,7 @@ export function SupportButton() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <MessageCircle className="h-5 w-5" />
-                  <CardTitle className="text-lg">Yardıma İhtiyacınız Var?</CardTitle>
+                  <CardTitle className="text-lg">{t.support.title}</CardTitle>
                 </div>
                 <Button
                   variant="ghost"
@@ -42,14 +44,12 @@ export function SupportButton() {
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              <CardDescription className="text-green-100">
-                Fitness yolculuğunuzda size yardımcı olmak için buradayız
-              </CardDescription>
+              <CardDescription className="text-green-100">{t.support.subtitle}</CardDescription>
             </CardHeader>
             <CardContent className="p-4 space-y-4">
               <div className="flex items-center gap-2 mb-4">
-                <Badge className="bg-green-100 text-green-800">Şimdi Çevrimiçi</Badge>
-                <span className="text-sm text-gray-600">Ortalama yanıt süresi: 2 dakika</span>
+                <Badge className="bg-green-100 text-green-800">{t.support.onlineNow}</Badge>
+                <span className="text-sm text-gray-600">{t.support.avgResponse}</span>
               </div>
 
               <div className="space-y-3">
@@ -57,8 +57,8 @@ export function SupportButton() {
                   <Link href="#" className="flex items-center gap-3">
                     <MessageSquare className="h-4 w-4 text-green-600" />
                     <div className="text-left">
-                      <div className="font-medium">Canlı Sohbet</div>
-                      <div className="text-xs text-gray-500">Destek ekibimizle sohbet edin</div>
+                      <div className="font-medium">{t.support.liveChat.title}</div>
+                      <div className="text-xs text-gray-500">{t.support.liveChat.description}</div>
                     </div>
                   </Link>
                 </Button>
@@ -67,8 +67,8 @@ export function SupportButton() {
                   <Link href="mailto:support@wellnityai.com" className="flex items-center gap-3">
                     <Mail className="h-4 w-4 text-green-600" />
                     <div className="text-left">
-                      <div className="font-medium">E-posta Desteği</div>
-                      <div className="text-xs text-gray-500">support@wellnityai.com</div>
+                      <div className="font-medium">{t.support.emailSupport.title}</div>
+                      <div className="text-xs text-gray-500">{t.support.emailSupport.description}</div>
                     </div>
                   </Link>
                 </Button>
@@ -77,8 +77,8 @@ export function SupportButton() {
                   <Link href="tel:+15551234567" className="flex items-center gap-3">
                     <Phone className="h-4 w-4 text-green-600" />
                     <div className="text-left">
-                      <div className="font-medium">Telefon Desteği</div>
-                      <div className="text-xs text-gray-500">+1 (555) 123-4567</div>
+                      <div className="font-medium">{t.support.phoneSupport.title}</div>
+                      <div className="text-xs text-gray-500">{t.support.phoneSupport.description}</div>
                     </div>
                   </Link>
                 </Button>
@@ -87,8 +87,8 @@ export function SupportButton() {
                   <Link href="/help" className="flex items-center gap-3">
                     <HelpCircle className="h-4 w-4 text-green-600" />
                     <div className="text-left">
-                      <div className="font-medium">Yardım Merkezi</div>
-                      <div className="text-xs text-gray-500">SSS ve kılavuzlara göz atın</div>
+                      <div className="font-medium">{t.support.helpCenter.title}</div>
+                      <div className="text-xs text-gray-500">{t.support.helpCenter.description}</div>
                     </div>
                   </Link>
                 </Button>
@@ -96,7 +96,7 @@ export function SupportButton() {
 
               <div className="pt-3 border-t">
                 <p className="text-xs text-gray-500 text-center">
-                  Acil yardıma mı ihtiyacınız var? Bizi doğrudan arayın:{" "}
+                  {t.support.emergency}{" "}
                   <Link href="tel:+15551234567" className="text-green-600 hover:underline">
                     +1 (555) 123-4567
                   </Link>
