@@ -14,9 +14,11 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react"
-import { SupportButton } from "@/components/support-button"
+import SupportButton from "@/components/support-button"
+import { useLanguage } from "@/hooks/use-language"
 
 export default function LoginPage() {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -39,7 +41,7 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
-        setError("Geçersiz e-posta veya şifre")
+        setError(t.auth.login.invalidCredentials)
       } else {
         // Get updated session and redirect
         const session = await getSession()
@@ -49,7 +51,7 @@ export default function LoginPage() {
         }
       }
     } catch (error) {
-      setError("Giriş yapılırken bir hata oluştu")
+      setError(t.auth.login.loginError)
     } finally {
       setIsLoading(false)
     }
@@ -63,8 +65,8 @@ export default function LoginPage() {
         <div className="max-w-md mx-auto">
           <Card className="shadow-2xl border-0">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Giriş Yap</CardTitle>
-              <CardDescription>Hesabınıza giriş yapın</CardDescription>
+              <CardTitle className="text-2xl">{t.auth.login.title}</CardTitle>
+              <CardDescription>{t.auth.login.subtitle}</CardDescription>
             </CardHeader>
             <CardContent>
               {error && (
@@ -76,13 +78,13 @@ export default function LoginPage() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="email">E-posta Adresi</Label>
+                  <Label htmlFor="email">{t.auth.login.email}</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="email"
                       type="email"
-                      placeholder="ornek@email.com"
+                      placeholder={t.auth.login.emailPlaceholder}
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="pl-10"
@@ -92,13 +94,13 @@ export default function LoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Şifre</Label>
+                  <Label htmlFor="password">{t.auth.login.password}</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      placeholder="Şifrenizi girin"
+                      placeholder={t.auth.login.passwordPlaceholder}
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                       className="pl-10 pr-10"
@@ -122,18 +124,18 @@ export default function LoginPage() {
 
                 <div className="flex items-center justify-between">
                   <Link href="/forgot-password" className="text-sm text-green-600 hover:underline">
-                    Şifremi unuttum
+                    {t.auth.login.forgotPassword}
                   </Link>
                 </div>
 
                 <Button type="submit" className="w-full bg-green-600 hover:bg-green-700" size="lg" disabled={isLoading}>
-                  {isLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
+                  {isLoading ? t.auth.login.loggingIn : t.auth.login.loginButton}
                 </Button>
 
                 <div className="text-center text-sm text-gray-600">
-                  Hesabınız yok mu?{" "}
+                  {t.auth.login.noAccount}{" "}
                   <Link href="/signup" className="text-green-600 hover:underline font-medium">
-                    Kayıt olun
+                    {t.auth.login.signUp}
                   </Link>
                 </div>
               </form>

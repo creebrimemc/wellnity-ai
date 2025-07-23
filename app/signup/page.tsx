@@ -15,9 +15,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Eye, EyeOff, User, Mail, Lock, AlertCircle } from "lucide-react"
-import { SupportButton } from "@/components/support-button"
+import SupportButton from "@/components/support-button"
+import { useLanguage } from "@/hooks/use-language"
 
 export default function SignUpPage() {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -42,13 +44,13 @@ export default function SignUpPage() {
     setError("")
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Şifreler eşleşmiyor")
+      setError("Passwords don't match") // This should be translated too
       setIsLoading(false)
       return
     }
 
     if (!formData.agreeToTerms) {
-      setError("Hizmet şartlarını kabul etmelisiniz")
+      setError("You must agree to the terms of service") // This should be translated too
       setIsLoading(false)
       return
     }
@@ -73,7 +75,7 @@ export default function SignUpPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || "Kayıt olurken bir hata oluştu")
+        throw new Error(data.error || "An error occurred during registration")
       }
 
       setSuccess(true)
@@ -81,7 +83,7 @@ export default function SignUpPage() {
         router.push("/login")
       }, 2000)
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Kayıt olurken bir hata oluştu")
+      setError(error instanceof Error ? error.message : "An error occurred during registration")
     } finally {
       setIsLoading(false)
     }
@@ -96,10 +98,8 @@ export default function SignUpPage() {
             <Card className="shadow-2xl border-0">
               <CardContent className="text-center py-12">
                 <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Kayıt Başarılı!</h2>
-                <p className="text-gray-600 mb-4">
-                  Hesabınız başarıyla oluşturuldu. Giriş sayfasına yönlendiriliyorsunuz...
-                </p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.auth.signup.success.title}</h2>
+                <p className="text-gray-600 mb-4">{t.auth.signup.success.message}</p>
               </CardContent>
             </Card>
           </div>
@@ -120,63 +120,51 @@ export default function SignUpPage() {
             {/* Left Side - Benefits */}
             <div className="space-y-8">
               <div>
-                <Badge className="bg-green-100 text-green-800 hover:bg-green-200 mb-4">Yolculuğunuzu Başlatın</Badge>
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">Bugün Wellnity AI'a Katılın</h1>
-                <p className="text-xl text-gray-600">
-                  Kişiselleştirilmiş AI fitness koçunuzla başlayın ve sağlık yolculuğunuzu dönüştürün.
-                </p>
+                <Badge className="bg-green-100 text-green-800 hover:bg-green-200 mb-4">{t.auth.signup.badge}</Badge>
+                <h1 className="text-4xl font-bold text-gray-900 mb-4">{t.auth.signup.title}</h1>
+                <p className="text-xl text-gray-600">{t.auth.signup.subtitle}</p>
               </div>
 
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Kişiselleştirilmiş AI Koçluğu</h3>
-                    <p className="text-gray-600">
-                      Fitness seviyenize ve hedeflerinize özel olarak uyarlanmış antrenman planları alın
-                    </p>
+                    <h3 className="font-semibold text-gray-900">{t.auth.signup.features.aiCoaching.title}</h3>
+                    <p className="text-gray-600">{t.auth.signup.features.aiCoaching.description}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
                   <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Gerçek Zamanlı Form Düzeltmesi</h3>
-                    <p className="text-gray-600">
-                      Yaralanmaları önlemek ve sonuçları maksimize etmek için AI destekli form analizi
-                    </p>
+                    <h3 className="font-semibold text-gray-900">{t.auth.signup.features.formCorrection.title}</h3>
+                    <p className="text-gray-600">{t.auth.signup.features.formCorrection.description}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
                   <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">İlerleme Takibi</h3>
-                    <p className="text-gray-600">
-                      Fitness yolculuğunuzu izlemek ve kilometre taşlarını kutlamak için gelişmiş analitik
-                    </p>
+                    <h3 className="font-semibold text-gray-900">{t.auth.signup.features.progressTracking.title}</h3>
+                    <p className="text-gray-600">{t.auth.signup.features.progressTracking.description}</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
                   <CheckCircle className="h-6 w-6 text-green-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900">Topluluk Desteği</h3>
-                    <p className="text-gray-600">
-                      Benzer düşünen fitness meraklılarıyla bağlantı kurun ve ilerlemenizi paylaşın
-                    </p>
+                    <h3 className="font-semibold text-gray-900">{t.auth.signup.features.communitySupport.title}</h3>
+                    <p className="text-gray-600">{t.auth.signup.features.communitySupport.description}</p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-lg">
-                <h3 className="font-semibold text-gray-900 mb-4">Ücretsiz Hesabınızda Neler Var:</h3>
+                <h3 className="font-semibold text-gray-900 mb-4">{t.auth.signup.benefits.title}</h3>
                 <ul className="space-y-2 text-gray-600">
-                  <li>• Sonsuza kadar ücretsiz plan</li>
-                  <li>• Sınırsız AI koçluk seansları</li>
-                  <li>• Tüm antrenman programlarına erişim</li>
-                  <li>• İlerleme takibi ve analitik</li>
-                  <li>• Topluluk erişimi</li>
+                  {t.auth.signup.benefits.items.map((item, index) => (
+                    <li key={index}>• {item}</li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -184,10 +172,8 @@ export default function SignUpPage() {
             {/* Right Side - Sign Up Form */}
             <Card className="shadow-2xl border-0">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Hesabınızı Oluşturun</CardTitle>
-                <CardDescription>
-                  Bugün sonsuza kadar ücretsiz planınızı başlatın. Kredi kartı gerekmez.
-                </CardDescription>
+                <CardTitle className="text-2xl">{t.auth.signup.title}</CardTitle>
+                <CardDescription>{t.auth.signup.subtitle}</CardDescription>
               </CardHeader>
               <CardContent>
                 {error && (
@@ -200,7 +186,7 @@ export default function SignUpPage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="firstName">Ad</Label>
+                      <Label htmlFor="firstName">{t.auth.signup.firstName}</Label>
                       <Input
                         id="firstName"
                         value={formData.firstName}
@@ -209,7 +195,7 @@ export default function SignUpPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="lastName">Soyad</Label>
+                      <Label htmlFor="lastName">{t.auth.signup.lastName}</Label>
                       <Input
                         id="lastName"
                         value={formData.lastName}
@@ -220,12 +206,12 @@ export default function SignUpPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="username">Kullanıcı Adı</Label>
+                    <Label htmlFor="username">{t.auth.signup.username}</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
                         id="username"
-                        placeholder="kullanici_adi"
+                        placeholder={t.auth.signup.usernamePlaceholder}
                         value={formData.username}
                         onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                         className="pl-10"
@@ -235,13 +221,13 @@ export default function SignUpPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">E-posta Adresi</Label>
+                    <Label htmlFor="email">{t.auth.signup.email}</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
                         id="email"
                         type="email"
-                        placeholder="ornek@email.com"
+                        placeholder={t.auth.signup.emailPlaceholder}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="pl-10"
@@ -251,13 +237,13 @@ export default function SignUpPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="password">Şifre</Label>
+                    <Label htmlFor="password">{t.auth.signup.password}</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="Güçlü bir şifre oluşturun"
+                        placeholder={t.auth.signup.passwordPlaceholder}
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         className="pl-10 pr-10"
@@ -277,19 +263,17 @@ export default function SignUpPage() {
                         )}
                       </Button>
                     </div>
-                    <p className="text-xs text-gray-500">
-                      En az 8 karakter, büyük harf, küçük harf, rakam ve özel karakter içermelidir
-                    </p>
+                    <p className="text-xs text-gray-500">{t.auth.signup.passwordRequirements}</p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Şifre Onayı</Label>
+                    <Label htmlFor="confirmPassword">{t.auth.signup.confirmPassword}</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
                         id="confirmPassword"
                         type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Şifrenizi tekrar girin"
+                        placeholder={t.auth.signup.confirmPasswordPlaceholder}
                         value={formData.confirmPassword}
                         onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                         className="pl-10 pr-10"
@@ -312,32 +296,32 @@ export default function SignUpPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="fitnessLevel">Mevcut Fitness Seviyesi</Label>
+                    <Label htmlFor="fitnessLevel">{t.auth.signup.fitnessLevel}</Label>
                     <Select onValueChange={(value) => setFormData({ ...formData, fitnessLevel: value })}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Fitness seviyenizi seçin" />
+                        <SelectValue placeholder={t.auth.signup.fitnessLevelPlaceholder} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="beginner">Başlangıç</SelectItem>
-                        <SelectItem value="intermediate">Orta</SelectItem>
-                        <SelectItem value="advanced">İleri</SelectItem>
-                        <SelectItem value="athlete">Atlet</SelectItem>
+                        <SelectItem value="beginner">{t.auth.signup.fitnessLevels.beginner}</SelectItem>
+                        <SelectItem value="intermediate">{t.auth.signup.fitnessLevels.intermediate}</SelectItem>
+                        <SelectItem value="advanced">{t.auth.signup.fitnessLevels.advanced}</SelectItem>
+                        <SelectItem value="athlete">{t.auth.signup.fitnessLevels.athlete}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="goals">Birincil Fitness Hedefi</Label>
+                    <Label htmlFor="goals">{t.auth.signup.goals}</Label>
                     <Select onValueChange={(value) => setFormData({ ...formData, goals: value })}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Birincil hedefinizi seçin" />
+                        <SelectValue placeholder={t.auth.signup.goalsPlaceholder} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="weight-loss">Kilo Verme</SelectItem>
-                        <SelectItem value="muscle-gain">Kas Kazanımı</SelectItem>
-                        <SelectItem value="endurance">Dayanıklılığı Artırma</SelectItem>
-                        <SelectItem value="strength">Güç Geliştirme</SelectItem>
-                        <SelectItem value="general">Genel Fitness</SelectItem>
+                        <SelectItem value="weight-loss">{t.auth.signup.goalOptions["weight-loss"]}</SelectItem>
+                        <SelectItem value="muscle-gain">{t.auth.signup.goalOptions["muscle-gain"]}</SelectItem>
+                        <SelectItem value="endurance">{t.auth.signup.goalOptions.endurance}</SelectItem>
+                        <SelectItem value="strength">{t.auth.signup.goalOptions.strength}</SelectItem>
+                        <SelectItem value="general">{t.auth.signup.goalOptions.general}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -349,14 +333,14 @@ export default function SignUpPage() {
                       onCheckedChange={(checked) => setFormData({ ...formData, agreeToTerms: checked as boolean })}
                     />
                     <Label htmlFor="terms" className="text-sm">
+                      {t.auth.signup.agreeToTerms}{" "}
                       <Link href="/terms" className="text-green-600 hover:underline">
-                        Hizmet Şartları
+                        {t.auth.signup.termsOfService}
                       </Link>{" "}
-                      ve{" "}
+                      {t.auth.signup.and}{" "}
                       <Link href="/privacy" className="text-green-600 hover:underline">
-                        Gizlilik Politikası
+                        {t.auth.signup.privacyPolicy}
                       </Link>
-                      'nı kabul ediyorum
                     </Label>
                   </div>
 
@@ -366,13 +350,13 @@ export default function SignUpPage() {
                     size="lg"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Hesap oluşturuluyor..." : "Ücretsiz Başlayın"}
+                    {isLoading ? t.auth.signup.creatingAccount : t.auth.signup.createAccount}
                   </Button>
 
                   <div className="text-center text-sm text-gray-600">
-                    Zaten hesabınız var mı?{" "}
+                    {t.auth.signup.alreadyHaveAccount}{" "}
                     <Link href="/login" className="text-green-600 hover:underline font-medium">
-                      Giriş yapın
+                      {t.auth.signup.signIn}
                     </Link>
                   </div>
                 </form>

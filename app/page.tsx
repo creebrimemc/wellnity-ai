@@ -8,7 +8,7 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { ArrowRight, Smartphone, Brain, Target, Users, Star } from "lucide-react"
 import Image from "next/image"
-import { SupportButton } from "@/components/support-button"
+import SupportButton from "@/components/support-button"
 import { useLanguage } from "@/hooks/use-language"
 
 export default function HomePage() {

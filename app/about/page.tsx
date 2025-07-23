@@ -1,12 +1,17 @@
+"use client"
+
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Brain, Target, Users, Award, Zap, Shield } from "lucide-react"
 import Image from "next/image"
-import { SupportButton } from "@/components/support-button"
+import SupportButton from "@/components/support-button"
+import { useLanguage } from "@/hooks/use-language"
 
 export default function AboutPage() {
+  const { t } = useLanguage()
+
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
@@ -14,15 +19,13 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 to-emerald-50">
         <div className="max-w-4xl mx-auto text-center">
-          <Badge className="bg-green-100 text-green-800 hover:bg-green-200 mb-4">Wellnity AI Hakkında</Badge>
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-200 mb-4">{t.about.badge}</Badge>
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            Fitness'ı
-            <span className="text-green-600"> Yapay Zeka</span> ile Devrimleştiriyoruz
+            {t.about.title}
+            <span className="text-green-600"> {t.about.titleHighlight}</span>
+            {t.about.titleEnd && <span> {t.about.titleEnd}</span>}
           </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Herkesin kişiselleştirilmiş, akıllı fitness koçluğuna erişimi olması gerektiğine inanıyoruz. Misyonumuz,
-            profesyonel kalitede fitness rehberliğini herkese, her yerde, her zaman erişilebilir kılmaktır.
-          </p>
+          <p className="text-xl text-gray-600 leading-relaxed">{t.about.subtitle}</p>
         </div>
       </section>
 
@@ -31,28 +34,17 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Hikayemiz</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">{t.about.story.title}</h2>
               <div className="space-y-4 text-gray-600">
-                <p>
-                  2023 yılında fitness meraklıları ve AI araştırmacılarından oluşan bir ekip tarafından kurulan Wellnity
-                  AI, basit bir gözlemden doğdu: geleneksel fitness uygulamaları herkese uyan tek boyutluydu, ancak her
-                  vücut benzersizdir.
-                </p>
-                <p>
-                  Gerçekten kişiselleştirilmiş bir deneyim yaratmak için son teknoloji yapay zekayı onlarca yıllık
-                  fitness uzmanlığıyla birleştirdik. AI'ımız sadece tekrar saymıyor - formunuzu anlıyor, ilerlemenize
-                  uyum sağlıyor ve fitness yolculuğunuzla birlikte gelişiyor.
-                </p>
-                <p>
-                  Bugün, dünya çapında 50.000'den fazla kullanıcıya hizmet vermekten gurur duyuyoruz ve onların AI'ın
-                  gücüyle fitness hedeflerine ulaşmalarına yardımcı oluyoruz.
-                </p>
+                {t.about.story.content.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </div>
             </div>
             <div className="relative">
               <Image
                 src="/placeholder.svg?height=400&width=500"
-                alt="Wellnity AI üzerinde çalışan ekip"
+                alt="Wellnity AI team working"
                 width={500}
                 height={400}
                 className="rounded-2xl shadow-lg"
@@ -66,8 +58,8 @@ export default function AboutPage() {
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Değerlerimiz</h2>
-            <p className="text-xl text-gray-600">Yaptığımız her şeye rehberlik eden ilkeler</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t.about.values.title}</h2>
+            <p className="text-xl text-gray-600">{t.about.values.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -76,10 +68,8 @@ export default function AboutPage() {
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                   <Brain className="h-6 w-6 text-green-600" />
                 </div>
-                <CardTitle>İnovasyon</CardTitle>
-                <CardDescription>
-                  AI ve fitness teknolojisiyle mümkün olanın sınırlarını sürekli zorluyoruz
-                </CardDescription>
+                <CardTitle>{t.about.values.innovation.title}</CardTitle>
+                <CardDescription>{t.about.values.innovation.description}</CardDescription>
               </CardHeader>
             </Card>
 
@@ -88,10 +78,8 @@ export default function AboutPage() {
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
                   <Users className="h-6 w-6 text-orange-600" />
                 </div>
-                <CardTitle>Kapsayıcılık</CardTitle>
-                <CardDescription>
-                  Fitness, yaş, yetenek veya deneyim seviyesi fark etmeksizin herkes içindir
-                </CardDescription>
+                <CardTitle>{t.about.values.inclusion.title}</CardTitle>
+                <CardDescription>{t.about.values.inclusion.description}</CardDescription>
               </CardHeader>
             </Card>
 
@@ -100,10 +88,8 @@ export default function AboutPage() {
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                   <Shield className="h-6 w-6 text-purple-600" />
                 </div>
-                <CardTitle>Gizlilik</CardTitle>
-                <CardDescription>
-                  Sağlık verileriniz kutsaldır. Bilgilerinizi korumak için kurumsal düzeyde güvenlik kullanıyoruz
-                </CardDescription>
+                <CardTitle>{t.about.values.privacy.title}</CardTitle>
+                <CardDescription>{t.about.values.privacy.description}</CardDescription>
               </CardHeader>
             </Card>
 
@@ -112,10 +98,8 @@ export default function AboutPage() {
                 <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
                   <Target className="h-6 w-6 text-red-600" />
                 </div>
-                <CardTitle>Sonuçlar</CardTitle>
-                <CardDescription>
-                  Gerçek, ölçülebilir fitness sonuçları elde etmenize yardımcı olmaya takıntılıyız
-                </CardDescription>
+                <CardTitle>{t.about.values.results.title}</CardTitle>
+                <CardDescription>{t.about.values.results.description}</CardDescription>
               </CardHeader>
             </Card>
 
@@ -124,8 +108,8 @@ export default function AboutPage() {
                 <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
                   <Zap className="h-6 w-6 text-yellow-600" />
                 </div>
-                <CardTitle>Sadelik</CardTitle>
-                <CardDescription>Karmaşık AI teknolojisi basit ve sezgisel kullanım hissi vermelidir</CardDescription>
+                <CardTitle>{t.about.values.simplicity.title}</CardTitle>
+                <CardDescription>{t.about.values.simplicity.description}</CardDescription>
               </CardHeader>
             </Card>
 
@@ -134,8 +118,8 @@ export default function AboutPage() {
                 <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
                   <Award className="h-6 w-6 text-teal-600" />
                 </div>
-                <CardTitle>Mükemmellik</CardTitle>
-                <CardDescription>Ürünümüzün ve hizmetimizin her alanında mükemmellik için çabalıyoruz</CardDescription>
+                <CardTitle>{t.about.values.excellence.title}</CardTitle>
+                <CardDescription>{t.about.values.excellence.description}</CardDescription>
               </CardHeader>
             </Card>
           </div>
@@ -146,8 +130,8 @@ export default function AboutPage() {
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Ekibimizle Tanışın</h2>
-            <p className="text-xl text-gray-600">Wellnity AI'ın arkasındaki uzmanlar</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t.about.team.title}</h2>
+            <p className="text-xl text-gray-600">{t.about.team.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -155,18 +139,16 @@ export default function AboutPage() {
               <CardHeader>
                 <Image
                   src="/placeholder.svg?height=150&width=150"
-                  alt="Sarah Chen"
+                  alt={t.about.team.members.sarah.name}
                   width={150}
                   height={150}
                   className="rounded-full mx-auto mb-4"
                 />
-                <CardTitle>Sarah Chen</CardTitle>
-                <CardDescription>CEO ve Kurucu Ortak</CardDescription>
+                <CardTitle>{t.about.team.members.sarah.name}</CardTitle>
+                <CardDescription>{t.about.team.members.sarah.role}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
-                  Makine öğrenmesi ve fitness teknolojisinde 10+ yıl deneyime sahip eski Google AI araştırmacısı
-                </p>
+                <p className="text-gray-600">{t.about.team.members.sarah.bio}</p>
               </CardContent>
             </Card>
 
@@ -174,18 +156,16 @@ export default function AboutPage() {
               <CardHeader>
                 <Image
                   src="/placeholder.svg?height=150&width=150"
-                  alt="Marcus Rodriguez"
+                  alt={t.about.team.members.marcus.name}
                   width={150}
                   height={150}
                   className="rounded-full mx-auto mb-4"
                 />
-                <CardTitle>Marcus Rodriguez</CardTitle>
-                <CardDescription>CTO ve Kurucu Ortak</CardDescription>
+                <CardTitle>{t.about.team.members.marcus.name}</CardTitle>
+                <CardDescription>{t.about.team.members.marcus.role}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
-                  Fitness uzmanlığını teknoloji ile birleştiren sertifikalı kişisel antrenör ve yazılım mühendisi
-                </p>
+                <p className="text-gray-600">{t.about.team.members.marcus.bio}</p>
               </CardContent>
             </Card>
 
@@ -193,18 +173,16 @@ export default function AboutPage() {
               <CardHeader>
                 <Image
                   src="/placeholder.svg?height=150&width=150"
-                  alt="Dr. Emily Watson"
+                  alt={t.about.team.members.emily.name}
                   width={150}
                   height={150}
                   className="rounded-full mx-auto mb-4"
                 />
-                <CardTitle>Dr. Emily Watson</CardTitle>
-                <CardDescription>Spor Bilimleri Başkanı</CardDescription>
+                <CardTitle>{t.about.team.members.emily.name}</CardTitle>
+                <CardDescription>{t.about.team.members.emily.role}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">
-                  Egzersiz Fizyolojisi doktoru, 15+ yıl deneyime sahip eski Olimpik takım danışmanı
-                </p>
+                <p className="text-gray-600">{t.about.team.members.emily.bio}</p>
               </CardContent>
             </Card>
           </div>

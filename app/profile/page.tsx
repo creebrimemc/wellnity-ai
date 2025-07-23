@@ -28,7 +28,8 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react"
-import { SupportButton } from "@/components/support-button"
+import SupportButton from "@/components/support-button"
+import { useLanguage } from "@/hooks/use-language"
 
 interface UserProfile {
   id: string
@@ -44,6 +45,7 @@ interface UserProfile {
 }
 
 export default function ProfilePage() {
+  const { t } = useLanguage()
   const { data: session, status } = useSession()
   const router = useRouter()
   const [profile, setProfile] = useState<UserProfile | null>(null)
@@ -81,10 +83,10 @@ export default function ProfilePage() {
         const data = await response.json()
         setProfile(data.user)
       } else {
-        setError("Profil bilgileri yüklenemedi")
+        setError(t.common.error)
       }
     } catch (error) {
-      setError("Profil bilgileri yüklenirken bir hata oluştu")
+      setError(t.common.error)
     } finally {
       setIsLoading(false)
     }
@@ -107,13 +109,13 @@ export default function ProfilePage() {
       if (response.ok) {
         const data = await response.json()
         setProfile(data.user)
-        setSuccess("Profil başarıyla güncellendi")
+        setSuccess(t.profile.edit.success)
       } else {
         const data = await response.json()
-        setError(data.error || "Profil güncellenirken bir hata oluştu")
+        setError(data.error || t.common.error)
       }
     } catch (error) {
-      setError("Profil güncellenirken bir hata oluştu")
+      setError(t.common.error)
     } finally {
       setIsUpdating(false)
     }
@@ -123,12 +125,12 @@ export default function ProfilePage() {
     e.preventDefault()
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setError("Yeni şifreler eşleşmiyor")
+      setError("New passwords don't match")
       return
     }
 
     // In a real app, you would call an API to update the password
-    setSuccess("Şifre başarıyla güncellendi")
+    setSuccess(t.profile.security.changePasswordForm.success)
     setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" })
     setShowPasswordForm(false)
   }
@@ -138,24 +140,11 @@ export default function ProfilePage() {
   }
 
   const getFitnessLevelText = (level: string) => {
-    const levels = {
-      beginner: "Başlangıç",
-      intermediate: "Orta",
-      advanced: "İleri",
-      athlete: "Atlet",
-    }
-    return levels[level as keyof typeof levels] || level
+    return t.profile.fitnessLevels[level as keyof typeof t.profile.fitnessLevels] || level
   }
 
   const getGoalsText = (goal: string) => {
-    const goals = {
-      "weight-loss": "Kilo Verme",
-      "muscle-gain": "Kas Kazanımı",
-      endurance: "Dayanıklılık",
-      strength: "Güç Geliştirme",
-      general: "Genel Fitness",
-    }
-    return goals[goal as keyof typeof goals] || goal
+    return t.profile.goals[goal as keyof typeof t.profile.goals] || goal
   }
 
   if (status === "loading" || isLoading) {
@@ -180,9 +169,9 @@ export default function ProfilePage() {
         <Navigation />
         <div className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Profil Bulunamadı</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Profile Not Found</h1>
             <Button onClick={() => router.push("/")} className="bg-green-600 hover:bg-green-700">
-              Ana Sayfaya Dön
+              Go Home
             </Button>
           </div>
         </div>
@@ -200,8 +189,8 @@ export default function ProfilePage() {
           <div className="mb-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Profilim</h1>
-                <p className="text-gray-600">Hesap bilgilerinizi yönetin</p>
+                <h1 className="text-3xl font-bold text-gray-900">{t.profile.title}</h1>
+                <p className="text-gray-600">{t.profile.subtitle}</p>
               </div>
               <Button
                 onClick={handleSignOut}
@@ -209,7 +198,7 @@ export default function ProfilePage() {
                 className="text-red-600 border-red-600 hover:bg-red-50 bg-transparent"
               >
                 <LogOut className="mr-2 h-4 w-4" />
-                Çıkış Yap
+                {t.profile.logout}
               </Button>
             </div>
           </div>
@@ -231,8 +220,8 @@ export default function ProfilePage() {
 
           <Tabs defaultValue="profile" className="space-y-6">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="profile">Profil Bilgileri</TabsTrigger>
-              <TabsTrigger value="security">Güvenlik</TabsTrigger>
+              <TabsTrigger value="profile">{t.profile.tabs.profile}</TabsTrigger>
+              <TabsTrigger value="security">{t.profile.tabs.security}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="profile" className="space-y-6">
@@ -241,7 +230,7 @@ export default function ProfilePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <User className="h-5 w-5" />
-                    Profil Özeti
+                    {t.profile.overview.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -250,7 +239,7 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-3">
                         <User className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">Ad Soyad</p>
+                          <p className="text-sm text-gray-500">{t.profile.overview.fullName}</p>
                           <p className="font-medium">
                             {profile.firstName} {profile.lastName}
                           </p>
@@ -260,14 +249,14 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-3">
                         <Mail className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">E-posta</p>
+                          <p className="text-sm text-gray-500">{t.profile.overview.email}</p>
                           <div className="flex items-center gap-2">
                             <p className="font-medium">{profile.email}</p>
                             {profile.isEmailVerified ? (
-                              <Badge className="bg-green-100 text-green-800">Doğrulandı</Badge>
+                              <Badge className="bg-green-100 text-green-800">{t.profile.overview.verified}</Badge>
                             ) : (
                               <Badge variant="outline" className="text-orange-600 border-orange-600">
-                                Doğrulanmadı
+                                {t.profile.overview.unverified}
                               </Badge>
                             )}
                           </div>
@@ -277,7 +266,7 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-3">
                         <Calendar className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">Üyelik Tarihi</p>
+                          <p className="text-sm text-gray-500">{t.profile.overview.memberSince}</p>
                           <p className="font-medium">{new Date(profile.createdAt).toLocaleDateString("tr-TR")}</p>
                         </div>
                       </div>
@@ -287,7 +276,7 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-3">
                         <Activity className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">Fitness Seviyesi</p>
+                          <p className="text-sm text-gray-500">{t.profile.overview.fitnessLevel}</p>
                           <p className="font-medium">{getFitnessLevelText(profile.fitnessLevel)}</p>
                         </div>
                       </div>
@@ -295,7 +284,7 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-3">
                         <Target className="h-5 w-5 text-gray-400" />
                         <div>
-                          <p className="text-sm text-gray-500">Hedef</p>
+                          <p className="text-sm text-gray-500">{t.profile.overview.goal}</p>
                           <p className="font-medium">{getGoalsText(profile.goals)}</p>
                         </div>
                       </div>
@@ -304,7 +293,7 @@ export default function ProfilePage() {
                         <div className="flex items-center gap-3">
                           <Calendar className="h-5 w-5 text-gray-400" />
                           <div>
-                            <p className="text-sm text-gray-500">Son Giriş</p>
+                            <p className="text-sm text-gray-500">{t.profile.overview.lastLogin}</p>
                             <p className="font-medium">{new Date(profile.lastLogin).toLocaleDateString("tr-TR")}</p>
                           </div>
                         </div>
@@ -317,8 +306,8 @@ export default function ProfilePage() {
               {/* Edit Profile */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Profil Düzenle</CardTitle>
-                  <CardDescription>Kişisel bilgilerinizi güncelleyin</CardDescription>
+                  <CardTitle>{t.profile.edit.title}</CardTitle>
+                  <CardDescription>{t.profile.edit.subtitle}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <form
@@ -336,50 +325,50 @@ export default function ProfilePage() {
                   >
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="firstName">Ad</Label>
+                        <Label htmlFor="firstName">{t.profile.edit.firstName}</Label>
                         <Input id="firstName" name="firstName" defaultValue={profile.firstName} required />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="lastName">Soyad</Label>
+                        <Label htmlFor="lastName">{t.profile.edit.lastName}</Label>
                         <Input id="lastName" name="lastName" defaultValue={profile.lastName} required />
                       </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="fitnessLevel">Fitness Seviyesi</Label>
+                        <Label htmlFor="fitnessLevel">{t.profile.edit.fitnessLevel}</Label>
                         <Select name="fitnessLevel" defaultValue={profile.fitnessLevel}>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="beginner">Başlangıç</SelectItem>
-                            <SelectItem value="intermediate">Orta</SelectItem>
-                            <SelectItem value="advanced">İleri</SelectItem>
-                            <SelectItem value="athlete">Atlet</SelectItem>
+                            <SelectItem value="beginner">{t.profile.fitnessLevels.beginner}</SelectItem>
+                            <SelectItem value="intermediate">{t.profile.fitnessLevels.intermediate}</SelectItem>
+                            <SelectItem value="advanced">{t.profile.fitnessLevels.advanced}</SelectItem>
+                            <SelectItem value="athlete">{t.profile.fitnessLevels.athlete}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="goals">Hedef</Label>
+                        <Label htmlFor="goals">{t.profile.edit.goals}</Label>
                         <Select name="goals" defaultValue={profile.goals}>
                           <SelectTrigger>
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="weight-loss">Kilo Verme</SelectItem>
-                            <SelectItem value="muscle-gain">Kas Kazanımı</SelectItem>
-                            <SelectItem value="endurance">Dayanıklılık</SelectItem>
-                            <SelectItem value="strength">Güç Geliştirme</SelectItem>
-                            <SelectItem value="general">Genel Fitness</SelectItem>
+                            <SelectItem value="weight-loss">{t.profile.goals["weight-loss"]}</SelectItem>
+                            <SelectItem value="muscle-gain">{t.profile.goals["muscle-gain"]}</SelectItem>
+                            <SelectItem value="endurance">{t.profile.goals.endurance}</SelectItem>
+                            <SelectItem value="strength">{t.profile.goals.strength}</SelectItem>
+                            <SelectItem value="general">{t.profile.goals.general}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
 
                     <Button type="submit" className="bg-green-600 hover:bg-green-700" disabled={isUpdating}>
-                      {isUpdating ? "Güncelleniyor..." : "Profili Güncelle"}
+                      {isUpdating ? t.profile.edit.updating : t.profile.edit.updateProfile}
                     </Button>
                   </form>
                 </CardContent>
@@ -392,30 +381,32 @@ export default function ProfilePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Settings className="h-5 w-5" />
-                    Güvenlik Ayarları
+                    {t.profile.security.title}
                   </CardTitle>
-                  <CardDescription>Hesap güvenliğinizi yönetin</CardDescription>
+                  <CardDescription>{t.profile.security.subtitle}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
-                      <h4 className="font-medium">Şifre</h4>
-                      <p className="text-sm text-gray-500">Son güncelleme: Bilinmiyor</p>
+                      <h4 className="font-medium">{t.profile.security.password.title}</h4>
+                      <p className="text-sm text-gray-500">{t.profile.security.password.lastUpdated}</p>
                     </div>
                     <Button variant="outline" onClick={() => setShowPasswordForm(!showPasswordForm)}>
-                      Şifre Değiştir
+                      {t.profile.security.password.changePassword}
                     </Button>
                   </div>
 
                   {showPasswordForm && (
                     <Card className="border-gray-200">
                       <CardHeader>
-                        <CardTitle className="text-lg">Şifre Değiştir</CardTitle>
+                        <CardTitle className="text-lg">{t.profile.security.changePasswordForm.title}</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <form onSubmit={handlePasswordUpdate} className="space-y-4">
                           <div className="space-y-2">
-                            <Label htmlFor="currentPassword">Mevcut Şifre</Label>
+                            <Label htmlFor="currentPassword">
+                              {t.profile.security.changePasswordForm.currentPassword}
+                            </Label>
                             <div className="relative">
                               <Input
                                 id="currentPassword"
@@ -442,7 +433,7 @@ export default function ProfilePage() {
                           </div>
 
                           <div className="space-y-2">
-                            <Label htmlFor="newPassword">Yeni Şifre</Label>
+                            <Label htmlFor="newPassword">{t.profile.security.changePasswordForm.newPassword}</Label>
                             <div className="relative">
                               <Input
                                 id="newPassword"
@@ -469,7 +460,9 @@ export default function ProfilePage() {
                           </div>
 
                           <div className="space-y-2">
-                            <Label htmlFor="confirmPassword">Yeni Şifre Onayı</Label>
+                            <Label htmlFor="confirmPassword">
+                              {t.profile.security.changePasswordForm.confirmPassword}
+                            </Label>
                             <div className="relative">
                               <Input
                                 id="confirmPassword"
@@ -497,7 +490,7 @@ export default function ProfilePage() {
 
                           <div className="flex gap-3">
                             <Button type="submit" className="bg-green-600 hover:bg-green-700">
-                              Şifreyi Güncelle
+                              {t.profile.security.changePasswordForm.updatePassword}
                             </Button>
                             <Button
                               type="button"
@@ -507,7 +500,7 @@ export default function ProfilePage() {
                                 setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" })
                               }}
                             >
-                              İptal
+                              {t.profile.security.changePasswordForm.cancel}
                             </Button>
                           </div>
                         </form>
@@ -517,21 +510,25 @@ export default function ProfilePage() {
 
                   <div className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
-                      <h4 className="font-medium">E-posta Doğrulama</h4>
+                      <h4 className="font-medium">{t.profile.security.emailVerification.title}</h4>
                       <p className="text-sm text-gray-500">
-                        {profile.isEmailVerified ? "E-posta adresiniz doğrulandı" : "E-posta adresiniz doğrulanmadı"}
+                        {profile.isEmailVerified
+                          ? t.profile.security.emailVerification.verified
+                          : t.profile.security.emailVerification.unverified}
                       </p>
                     </div>
-                    {!profile.isEmailVerified && <Button variant="outline">Doğrulama E-postası Gönder</Button>}
+                    {!profile.isEmailVerified && (
+                      <Button variant="outline">{t.profile.security.emailVerification.sendVerification}</Button>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-between p-4 border rounded-lg border-red-200 bg-red-50">
                     <div>
-                      <h4 className="font-medium text-red-900">Hesabı Sil</h4>
-                      <p className="text-sm text-red-700">Hesabınızı kalıcı olarak silin. Bu işlem geri alınamaz.</p>
+                      <h4 className="font-medium text-red-900">{t.profile.security.deleteAccount.title}</h4>
+                      <p className="text-sm text-red-700">{t.profile.security.deleteAccount.description}</p>
                     </div>
                     <Button variant="outline" className="text-red-600 border-red-600 hover:bg-red-50 bg-transparent">
-                      Hesabı Sil
+                      {t.profile.security.deleteAccount.button}
                     </Button>
                   </div>
                 </CardContent>
